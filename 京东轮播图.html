@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>京东轮播图</title>
+	<meta charset="utf-8">
+	<style type="text/css">
+	   body{
+			margin: 0;
+			line-height: 1;
+		}
+		#banner{
+			position: relative;
+			width: 590px;
+			height: 470PX;
+			margin: 0 auto;
+		}
+		.item {
+			display: none;
+			width: 590px;
+			height: 470PX;
+			position: absolute;
+		}
+		.bth-list {
+			position: absolute;
+			width: 152px;
+			height: px;
+			left: 40px;
+			bottom: 20px;
+		}
+		.bth {
+			opacity: 0.7;
+			width: 6px;
+			height: 6px;
+			float: left;
+			border: 2px solid #F0EDED;
+			border-radius: 5px;
+			margin-right: 8px;
+		}
+		.active {
+			opacity:0.7;
+			background-color: #FFFFFF;
+			border-color: #FFFFFF;
+		}
+		.tab{
+			position: absolute;
+			width: 24px;
+			height: 40px;
+			font-size: 20px;
+			line-height: 40px;
+			cursor: pointer;
+			top: 48%;
+			text-align: center;
+			color: white;
+			background-color: rgba(0,0,0,0.5);
+			opacity: 0.4;
+		}
+		.tab:hover{
+			opacity: 0.5;
+			color: white;
+			background: black;
+		}
+		.left {
+			left: 0px;
+		}
+		.right {
+			right: 0px;
+		}
+</style>
+</head>
+<body>
+	<div id="banner">
+		<div class="warp">
+			<a href="#" class="item" style="display: block;"><img src="images/1.jpg" alt="" /></a>
+			<a href="#" class="item"><img src="images/2.jpg" alt="" /></a>
+			<a href="#" class="item"><img src="images/3.jpg" alt="" /></a>
+			<a href="#" class="item"><img src="images/4.jpg" alt="" /></a>
+			<a href="#" class="item"><img src="images/5.jpg" alt="" /></a>
+			<a href="#" class="item"><img src="images/6.jpg" alt="" /></a>
+			<a href="#" class="item"><img src="images/7.jpg" alt="" /></a>
+			<a href="#" class="item"><img src="images/8.jpg" alt="" /></a>
+		</div>
+		<!--点击按钮列表-->
+		<div class="bth-list">
+			<div class="bth active"></div>
+			<div class="bth"></div>
+			<div class="bth"></div>
+			<div class="bth"></div>
+			<div class="bth"></div>
+			<div class="bth"></div>
+			<div class="bth"></div>
+			<div class="bth"></div>
+		</div>
+		<!--左按钮-->
+		<div class="tab left">&lt;</div>
+		<!--右按钮-->
+		<div class="tab right">&gt;</div>
+	</div>
+</body>
+<script type="text/javascript" src="jQuery.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		var index = 0; 
+		var stop = false; //触发器
+		var $li = $("#banner").find(".warp").children(".item"); 
+		var $page = $("#banner").find(".bth-list").children(".bth"); 
+		$page.hover(function() {			
+			index = $(this).index(); 
+			$(this).addClass("active").stop(true,true).siblings().removeClass("active"); 
+			$li.eq(index).stop(true,true).fadeIn(1000).siblings().fadeOut(1000); 
+		});
+		//左按钮
+		$(".left").click(function() {
+			clearInterval(timer);
+			index--;
+			if(index < 0) {
+				index = $li.length-1;
+			}
+			$li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+			$page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+		});
+		//右按钮
+		$(".right").click(function(){
+			clearInterval(timer);
+			index++;
+			if(index > $li.length-1) {
+				index = 0;
+			}
+			$li.eq(index).stop(true,true).fadeIn().siblings().fadeOut();
+			$page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+		});
+		//自动轮播图片
+		var timer = setInterval(function() {
+			if(stop) return;
+			index++;
+			if(index > $li.length-1) {
+				index = 0;
+			}
+			$li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+			$page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+		},3000);
+		//鼠标移入图片内，自动轮播停止
+		$("#banner").mousemove(function() {
+			clearInterval(timer);
+		}).mouseout(function() {
+			timer = setInterval(function() {
+				if(stop) return;
+				index++;
+				if(index > $li.length-1) {
+					index = 0;
+				}
+				$li.eq(index).stop(true, true).fadeIn().siblings().fadeOut();
+				$page.eq(index).addClass("active").stop(true, true).siblings().removeClass("active");
+			},3000);
+		});
+	});
+</script>
+</html>
